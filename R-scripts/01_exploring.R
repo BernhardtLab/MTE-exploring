@@ -13,7 +13,7 @@ gr <- read_csv("data-raw/growth-rates.csv", col_names = c("temperature_k", "grow
 ##plot data
 k <- 8.62*(10^-5) ### boltzman's constant
 
-### this is the same as Figure 2.5a
+### this is the same as Figure 2.5a (TPC of growth rate on a linear scale)
 gr %>% 
   ggplot(aes(x = temperature_c, y = growth_rate)) + geom_point()
 
@@ -22,7 +22,7 @@ gr %>%
   filter(growth_rate == max(growth_rate)) %>% View ### find the optimal temperature for growth, to use to subset the dataset to growth rates only in the rising portion of the curve
 
 gr_rising <- gr %>% 
-  filter(temperature_c < 30.41322) %>% 
+  filter(temperature_c < 30.41322) %>% ### filter to suboptimal temps
   mutate(inverse_temp = 1/(k*temperature_k)) ### this is the wonky inverse temperature you see on MTE plots
 
 
@@ -36,9 +36,9 @@ gr_rising %>%
 gr_rising %>% 
   ggplot(aes(x = inverse_temp, y = log(growth_rate))) + geom_point() +geom_smooth(method = "lm")
 
-ea_fit <- lm(log(growth_rate) ~ inverse_temp, data = gr_rising)
+ea_fit <- lm(log(growth_rate) ~ inverse_temp, data = gr_rising) ### fit a linear model to estimate activation energy
 
 
-summary(ea_fit) ### the slope here (inverse_temp coefficient is the activation energy, E, slightly off from the -0.66 you see in the textbook, probably because of digitizing error and my cutoff for suboptimal temps is slightly different than theirs)
+summary(ea_fit) ### the slope here (inverse_temp coefficient is the activation energy, E, slightly off from their -0.66 you see in the textbook, probably because of digitizing error and my cutoff for suboptimal temps is slightly different than theirs)
 
 
