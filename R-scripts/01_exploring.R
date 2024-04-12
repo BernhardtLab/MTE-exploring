@@ -7,7 +7,7 @@ theme_set(theme_cowplot())
 
 
 
-gr <- read_csv("growth-rates.csv", col_names = c("temperature_k", "growth_rate")) %>% 
+gr <- read_csv("data-raw/growth-rates.csv", col_names = c("temperature_k", "growth_rate")) %>% 
   mutate(temperature_c = temperature_k -273.15)
 
 ##plot data
